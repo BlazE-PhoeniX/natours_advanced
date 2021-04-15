@@ -2,7 +2,7 @@ import { showAlert } from "./alert";
 
 export const login = async (email, password) => {
   const res = await (
-    await fetch("http://127.0.0.1:3000/api/v1/users/login", {
+    await fetch("/api/v1/users/login", {
       method: "post",
       body: JSON.stringify({
         email,
@@ -25,9 +25,7 @@ export const login = async (email, password) => {
 };
 
 export const logout = async () => {
-  const res = await (
-    await fetch("http://127.0.0.1:3000/api/v1/users/logout")
-  ).json();
+  const res = await (await fetch("/api/v1/users/logout")).json();
 
   if (res.status === "success") {
     showAlert("success", res.message);

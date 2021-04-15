@@ -3,7 +3,7 @@ import { showAlert } from "./alert";
 export const updateSettings = async function (data, type) {
   const res = await (
     await fetch(
-      `http://127.0.0.1:3000/api/v1/users/${
+      `/api/v1/users/${
         type === "password" ? "update-password" : "update-profile"
       }`,
       {
