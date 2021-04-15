@@ -6,6 +6,7 @@ const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const hpp = require("hpp");
 const cookieParser = require("cookie-parser");
+const compression = require("compression");
 
 const ApiError = require(`${__dirname}/utils/apiError`);
 const globalErrorController = require(`${__dirname}/controllers/errorController`);
@@ -54,7 +55,10 @@ app.use(
 app.use(express.static(`${__dirname}/public`));
 
 // logging
-app.use(morgan("dev"));
+if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
+
+// compression text in response
+app.use(compression());
 
 // limits requests from a particular ip
 const limiter = rateLimit({

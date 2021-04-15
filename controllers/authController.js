@@ -46,8 +46,6 @@ module.exports.signupUser = catchAsync(async (req, res, next) => {
 
   const token = await createSendToken(newlyAddedUser, res);
 
-  console.log(token);
-
   res.status(201).json({
     status: "success",
     message: "user signed up successfully",
@@ -64,8 +62,6 @@ module.exports.signupUser = catchAsync(async (req, res, next) => {
 
 module.exports.loginUser = async (req, res, next) => {
   const { email, password } = req.body;
-
-  console.log(email, password);
 
   const user = await User.findOne({ email }).select("+password");
 

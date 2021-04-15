@@ -16,6 +16,7 @@
     "@babel/polyfill": "*",
     "@vonage/server-sdk": "*",
     "bcryptjs": "*",
+    "compression": "*",
     "cookie-parser": "*",
     "cookieparser": "*",
     "dotenv": "^8.2.0",
