@@ -7,6 +7,7 @@ const hpp = require("hpp");
 const cookieParser = require("cookie-parser");
 const compression = require("compression");
 const cors = require("cors");
+const helmet = require("helmet");
 
 const ApiError = require(`${__dirname}/utils/apiError`);
 const globalErrorController = require(`${__dirname}/controllers/errorController`);
@@ -28,6 +29,9 @@ app.set("views", `${__dirname}/views`);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+// to add safety headers
+app.use(helmet());
 
 // to allow cross origin requests
 app.use(cors());
