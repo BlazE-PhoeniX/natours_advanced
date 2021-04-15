@@ -177,13 +177,6 @@ tourSchema.pre(/^find/, function (next) {
       "-__v -password -lastPasswordChange -passwordResetToken -passwordResetTokenExpiresIn -_id",
   });
 
-  this.start = Date.now();
-  next();
-});
-
-// post s => first parameter points to fetched docs
-tourSchema.post(/^find/, function (doc, next) {
-  console.log(`Query took ${Date.now() - this.start} ms`);
   next();
 });
 
