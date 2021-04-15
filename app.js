@@ -17,6 +17,7 @@ const reviewRouter = require(`${__dirname}/routes/reviewRoutes`);
 const viewRouter = require(`${__dirname}/routes/viewRoutes`);
 
 const app = express();
+app.enable("trust proxy");
 
 // to initialise pug templates
 app.set("view engine", "pug");

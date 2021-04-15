@@ -12,7 +12,7 @@ const createToken = async id => {
   });
 };
 
-const createSendToken = async (user, res) => {
+const createSendToken = async (user, req, res) => {
   const token = await createToken(user._id);
 
   cookieOptions = {
@@ -20,9 +20,8 @@ const createSendToken = async (user, res) => {
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
+    secure: req.secure || req.header("x-forwarded-proto") === "https",
   };
-
-  if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
 
   res.cookie("jwt", token, cookieOptions);
 
@@ -44,7 +43,7 @@ module.exports.signupUser = catchAsync(async (req, res, next) => {
     `${req.protocol}://${req.get("host")}/me`
   ).sendWelcome();
 
-  const token = await createSendToken(newlyAddedUser, res);
+  const token = await createSendToken(newlyAddedUser, req, res);
 
   res.status(201).json({
     status: "success",
@@ -68,7 +67,7 @@ module.exports.loginUser = async (req, res, next) => {
   if (!user || !(await user.comparePasswords(password, user.password)))
     return next(new ApiError(401, "fail", "Invalid email id or password."));
 
-  const token = await createSendToken(user, res);
+  const token = await createSendToken(user, req, res);
 
   res.status(200).json({
     status: "success",
@@ -216,7 +215,7 @@ module.exports.resetPassword = catchAsync(async (req, res, next) => {
   user.passwordResetToken = user.passwordResetTokenExpiresIn = undefined;
   await user.save();
 
-  const token = await createSendToken(user, res);
+  const token = await createSendToken(user, req, res);
 
   res.status(200).json({
     status: "success",
@@ -241,7 +240,7 @@ module.exports.updatePassword = catchAsync(async (req, res, next) => {
 
   await user.save();
 
-  const token = await createSendToken(user, res);
+  const token = await createSendToken(user, req, res);
 
   res.status(200).json({
     status: "success",
