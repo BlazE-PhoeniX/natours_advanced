@@ -7,6 +7,8 @@ const authController = require(`${__dirname}/../controllers/authController`);
 
 const router = express.Router();
 
+router.use(viewController.getAlerts);
+
 router.route("/me").get(authController.verifyUser, viewController.getProfile);
 
 router

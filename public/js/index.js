@@ -9,6 +9,7 @@ import { updateSettings } from "./updateSettings";
 import { displayMap } from "./mapbox";
 
 import { bookTour } from "./stripe";
+import { showAlert } from "./alert";
 
 // dom elements
 const loginForm = document.querySelector(".form--login");
@@ -19,6 +20,10 @@ const map = document.querySelector("#map");
 const savePasswordBtn = document.querySelector(".btn--save-password");
 const logoutBtn = document.querySelector(".nav__el--logout");
 const bookTourBtn = document.querySelector("#book-tour");
+
+const alertMessage = document.querySelector("body").dataset.alertMessage;
+const alertType = document.querySelector("body").dataset.alertType;
+if (alertMessage !== "" && alertType !== "") showAlert(alertType, alertMessage);
 
 if (loginForm)
   loginForm.addEventListener("submit", async function (e) {
