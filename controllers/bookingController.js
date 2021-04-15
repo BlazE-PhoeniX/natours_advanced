@@ -1,4 +1,5 @@
 const Tour = require(`${__dirname}/../models/tourModel`);
+const User = require(`${__dirname}/../models/userModel`);
 const Booking = require(`${__dirname}/../models/bookingModel`);
 const catchAsync = require(`${__dirname}/../utils/catchAsync`);
 const stripe = require("stripe")(process.env.STRIPE_API_KEY);
