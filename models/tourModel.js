@@ -180,10 +180,6 @@ tourSchema.pre(/^find/, function (next) {
   next();
 });
 
-tourSchema.post("aggregate", function (doc, next) {
-  next();
-});
-
 const Tour = mongoose.model("Tour", tourSchema);
 
 module.exports = Tour;
