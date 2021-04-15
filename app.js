@@ -6,6 +6,7 @@ const xss = require("xss-clean");
 const hpp = require("hpp");
 const cookieParser = require("cookie-parser");
 const compression = require("compression");
+const cors = require("cors");
 
 const ApiError = require(`${__dirname}/utils/apiError`);
 const globalErrorController = require(`${__dirname}/controllers/errorController`);
@@ -27,6 +28,12 @@ app.set("views", `${__dirname}/views`);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+// to allow cross origin requests
+app.use(cors());
+
+// to allow complex requests from cross origin (origin is simply the host url)
+app.options("*", cors());
 
 // protects against no sql attacks
 app.use(mongoSanitize());
