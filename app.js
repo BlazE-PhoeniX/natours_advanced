@@ -17,12 +17,20 @@ const bookingRouter = require(`${__dirname}/routes/bookingRoutes`);
 const reviewRouter = require(`${__dirname}/routes/reviewRoutes`);
 const viewRouter = require(`${__dirname}/routes/viewRoutes`);
 
+const bookingController = require(`${__dirname}/controllers/bookingController`);
+
 const app = express();
 app.enable("trust proxy");
 
 // to initialise pug templates
 app.set("view engine", "pug");
 app.set("views", `${__dirname}/views`);
+
+app.post(
+  "/webhook-checkout",
+  express.raw({ type: "application/json" }),
+  bookingController.getWebhookCheckout
+);
 
 // parses body and limits size
 app.use(express.json());
