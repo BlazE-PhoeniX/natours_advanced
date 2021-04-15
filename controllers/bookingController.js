@@ -1,0 +1,58 @@
+const Tour = require(`${__dirname}/../models/tourModel`);
+const Booking = require(`${__dirname}/../models/bookingModel`);
+const catchAsync = require(`${__dirname}/../utils/catchAsync`);
+const Stripe = require("stripe");
+const factory = require(`${__dirname}/../utils/handlerFactory`);
+
+exports.getCheckoutSession = catchAsync(async (req, res, next) => {
+  const tour = await Tour.findById(req.params.tourId);
+
+  const stripe = Stripe(process.env.STRIPE_API_KEY);
+
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ["card"],
+    success_url: `${req.protocol}://${req.get("host")}?tour=${tour.id}&user=${
+      req.user.id
+    }&price=${tour.price}`,
+    cancel_url: `${req.protocol}://${req.get("host")}/tour/${tour.slug}`,
+    customer_email: req.user.email,
+    client_reference_id: req.params.tourId,
+    mode: "payment",
+    line_items: [
+      {
+        name: `${tour.name} Tour`,
+        description: tour.summary,
+        images: [`https://www.natours.dev/img/tours/${tour.imageCover}`],
+        amount: tour.price * 100,
+        currency: "inr",
+        quantity: 1,
+      },
+    ],
+  });
+
+  // 3) Create session as response
+  res.status(200).json({
+    status: "success",
+    data: { session },
+  });
+});
+
+exports.createBookingCheckout = catchAsync(async (req, res, next) => {
+  const { user, tour, price } = req.query;
+
+  if (!user || !tour || !price) return next();
+
+  await Booking.create({
+    user: user,
+    tour: tour,
+    price: price,
+  });
+
+  res.redirect(req.originalUrl.split("?")[0]);
+});
+
+exports.getAllBookings = factory.getAll(Booking, "Booking");
+exports.createBooking = factory.createOne(Booking, "Booking");
+exports.getOneBooking = factory.getOne(Booking, "Booking");
+exports.changeBooking = factory.updateOne(Booking, "Booking");
+exports.deleteBooking = factory.deleteOne(Booking, "Booking");
