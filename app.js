@@ -1,7 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
-// const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const hpp = require("hpp");
@@ -22,9 +21,6 @@ const app = express();
 // to initialise pug templates
 app.set("view engine", "pug");
 app.set("views", `${__dirname}/views`);
-
-// adds security headers
-// app.use(helmet());
 
 // parses body and limits size
 app.use(express.json());
@@ -79,15 +75,6 @@ app.use("/bookings", bookingRouter);
 app.use("/api/v1/tours", tourRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/reviews", reviewRouter);
-
-// to handle all routes that are not specified (all type of requests)
-// app.all("*", (req, res) => {
-//   res.status(404).json({
-//     status: "fail",
-//     message: `Cant find ${req.originalUrl} on this server`,
-//     data: null,
-//   });
-// });
 
 app.all("*", (req, res, next) => {
   next(

@@ -29,16 +29,6 @@ mongoose
     console.log("Database connection successful");
   });
 
-// local db
-// mongoose
-// .connect(process.env.DB_LOCAL, {
-//   useNewUrlParser: "true",
-//   useCreateIndex: "true",
-//   useFindAndModify: "false",
-//   useUnifiedTopology: true,
-// })
-// .then(() => console.log("Database connection successful"));
-
 let port = process.env.PORT || 3300;
 const server = app.listen(port, () => {
   console.log("listening to port " + port);

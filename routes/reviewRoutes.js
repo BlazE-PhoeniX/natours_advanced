@@ -1,6 +1,5 @@
 const express = require("express");
 
-// const tourController = require(`${__dirname}/../controllers/tourController`);
 const reviewController = require(`${__dirname}/../controllers/reviewController`);
 const authController = require(`${__dirname}/../controllers/authController`);
 

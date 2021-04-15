@@ -66,12 +66,6 @@ const UserSchema = new mongoose.Schema(
   }
 );
 
-// UserSchema.virtual("bookings", {
-//   ref: "Booking",
-//   foreignField: "user",
-//   localField: "_id",
-// });
-
 UserSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
 

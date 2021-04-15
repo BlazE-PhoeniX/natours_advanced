@@ -1,9 +1,6 @@
 import { showAlert } from "./alert";
 
 export const updateSettings = async function (data, type) {
-  // data = JSON.stringify(data);
-  // console.log(data);
-
   const res = await (
     await fetch(
       `http://127.0.0.1:3000/api/v1/users/${
@@ -12,9 +9,6 @@ export const updateSettings = async function (data, type) {
       {
         method: "PATCH",
         body: data,
-        // headers: {
-        //   "Content-Type": "application/json",
-        // },
       }
     )
   ).json();

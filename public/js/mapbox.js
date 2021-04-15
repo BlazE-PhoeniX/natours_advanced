@@ -6,9 +6,6 @@ export const displayMap = locations => {
     container: "map",
     style: "mapbox://styles/blazephoenix/cknbiztr10pyv17r0yr7dkahj",
     scrollZoom: false,
-    // center: [79.907532, 13.14292],
-    // zoom: 10,
-    // interactive: false,
   });
 
   const bounds = new mapboxgl.LngLatBounds();

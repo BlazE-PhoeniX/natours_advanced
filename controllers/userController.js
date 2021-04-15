@@ -5,15 +5,6 @@ const catchAsync = require(`${__dirname}/../utils/catchAsync`);
 const ApiError = require(`${__dirname}/../utils/apiError`);
 const factory = require(`${__dirname}/../utils/handlerFactory`);
 
-// const multerStorage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, "public/img/users");
-//   },
-//   filename: (req, file, cb) => {
-//     const ext = file.mimetype.split("/")[1];
-//     cb(null, `user-${req.user.id}-${Date.now()}.${ext}`);
-//   },
-// });
 const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req, file, cb) => {
@@ -38,10 +29,6 @@ const filterObj = (obj, ...allowedFields) =>
 exports.getUsers = factory.getAll(User, "User");
 
 exports.getOneUser = factory.getOne(User, "User");
-// exports.getOneUser = factory.getOne(User, "User", {
-//   path: "bookings",
-//   select: "user",
-// });
 
 exports.changeUser = factory.updateOne(User, "User");
 
