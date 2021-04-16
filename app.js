@@ -19,6 +19,8 @@ const viewRouter = require(`${__dirname}/routes/viewRoutes`);
 
 const bookingController = require(`${__dirname}/controllers/bookingController`);
 
+const { getFileStream } = require(`${__dirname}/utils/s3`);
+
 const app = express();
 app.enable("trust proxy");
 
@@ -84,6 +86,11 @@ app.use("/api", limiter);
 app.use((req, res, next) => {
   req.time = new Date().toISOString();
   next();
+});
+
+app.get(`/images/users/:filename`, (req, res) => {
+  console.log(req.params.filename);
+  getFileStream(req.params.filename).pipe(res);
 });
 
 app.use("/", viewRouter);

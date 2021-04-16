@@ -16,6 +16,7 @@
   "dependencies": {
     "@babel/polyfill": "*",
     "@vonage/server-sdk": "*",
+    "aws-sdk": "*",
     "bcryptjs": "*",
     "compression": "*",
     "cookie-parser": "*",
