@@ -14,15 +14,15 @@ exports.uploadFile = file => {
     .upload({
       Bucket: process.env.S3_BUCKET_NAME,
       Body: fileStream,
-      Key: file.filename,
+      Key: `users/${file.filename}`,
     })
     .promise();
 };
 
-exports.getFileStream = filename => {
+exports.getFileStream = filekey => {
   return s3
     .getObject({
-      Key: filename,
+      Key: filekey,
       Bucket: process.env.S3_BUCKET_NAME,
     })
     .createReadStream();

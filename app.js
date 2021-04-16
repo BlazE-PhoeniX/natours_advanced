@@ -88,9 +88,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get(`/images/users/:filename`, (req, res) => {
-  console.log(req.params.filename);
-  getFileStream(req.params.filename).pipe(res);
+app.get(`/images/:filekey`, (req, res) => {
+  getFileStream(req.params.filekey).pipe(res);
 });
 
 app.use("/", viewRouter);
