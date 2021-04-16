@@ -88,8 +88,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get(`/images/:filekey`, (req, res) => {
-  getFileStream(req.params.filekey).pipe(res);
+app.get(`/images/:folder/:file`, (req, res) => {
+  const filekey = `${req.params.folder}/${req.params.file}`;
+  getFileStream(filekey).pipe(res);
 });
 
 app.use("/", viewRouter);
