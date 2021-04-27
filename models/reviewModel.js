@@ -41,14 +41,6 @@ const ReviewSchema = new mongoose.Schema(
 ReviewSchema.index({ tour: 1, user: 1 }, { unique: true });
 
 ReviewSchema.pre(/^find/, function (next) {
-  // this.populate({
-  //   path: "user",
-  //   select: "name photo",
-  // }).populate({
-  //   path: "tour",
-  //   select: "name",
-  // });
-
   this.populate({
     path: "user",
     select: "name photo",
@@ -97,11 +89,6 @@ ReviewSchema.pre(/^findOneAnd/, async function (next) {
 ReviewSchema.post(/^findOneAnd/, async function () {
   this.doc.constructor.calcRatingsAverage(this.doc.tour);
 });
-
-// my method
-// ReviewSchema.post(/^findOneAnd/, function (doc) {
-//   doc.constructor.calcRatingsAverage(doc.tour);
-// });
 
 const Review = mongoose.model("Review", ReviewSchema);
 

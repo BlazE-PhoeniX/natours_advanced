@@ -41,7 +41,7 @@ const devErrorHandle = (err, req, res) => {
     });
   }
 
-  console.log("Error: " + err);
+  console.error("Error: " + err);
   return res.status(err.statusCode).render("error", {
     title: "Something went wrong!",
     msg: err.message,
@@ -49,7 +49,7 @@ const devErrorHandle = (err, req, res) => {
 };
 
 const prodErrorHandle = (err, req, res) => {
-  console.log("Error: ", err);
+  console.error("Error: ", err);
   if (req.originalUrl.startsWith("/api")) {
     if (err.isOperational) {
       return res.status(err.statusCode).json({

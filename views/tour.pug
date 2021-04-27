@@ -51,7 +51,7 @@ block content
           h2.heading-secondary.ma-bt-lg Your tour guides
           each guide in tour.guides
             .overview-box__detail
-              img.overview-box__img(src=`/img/users/${guide.photo}`, alt=`${guide.name}`)
+              img.overview-box__img(src=`/images/users/${guide.photo}`, alt=`${guide.name}`)
               span.overview-box__label= guide.role=="guide" ? "tour guide" : "lead guide"
               span.overview-box__text= guide.name
           

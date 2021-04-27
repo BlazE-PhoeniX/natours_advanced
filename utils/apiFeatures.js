@@ -19,9 +19,6 @@ class APIFeatures {
 
     this.query = this.query.find(filterObj);
 
-    // alternate way of filtering
-    // const query = Tour.find().where(field).equals(value).where(field).lte(value)...;
-
     return this;
   }
 
@@ -40,9 +37,6 @@ class APIFeatures {
   limit() {
     // limiting fields
     if (this.queryObj.fields) {
-      // const fields = {};
-      // this.queryObj.fields.split(",").forEach(el => (fields[el] = 1));
-
       const fields = this.queryObj.fields.replaceAll(",", " ");
       this.query = this.query.select(fields);
     } else {
@@ -60,10 +54,6 @@ class APIFeatures {
       const skip = (page - 1) * limit;
 
       this.query = this.query.skip(skip).limit(limit);
-
-      // if (skip >= (await Tour.countDocuments())) {
-      //   throw new Error("No more tours to show");
-      // }
     }
 
     return this;

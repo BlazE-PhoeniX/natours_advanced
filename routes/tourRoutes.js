@@ -2,21 +2,10 @@ const express = require("express");
 
 const tourController = require(`${__dirname}/../controllers/tourController`);
 const authController = require(`${__dirname}/../controllers/authController`);
-// const reviewController = require(`${__dirname}/../controllers/reviewController`);
 
 const reviewRouter = require(`${__dirname}/reviewRoutes`);
 
 const router = express.Router();
-
-// creating new review for a particular tour
-// its messy since we deal with reviews in a tour router
-// router
-//   .route("/:tourId/reviews")
-//   .post(
-//     authController.verifyUser,
-//     authController.allowOnly("user"),
-//     reviewController.createReview
-//   );
 
 // so we are gonna redirect these request to review router
 router.use("/:tourId/reviews", reviewRouter);

@@ -12,7 +12,7 @@ html
       link(href="https://fonts.googleapis.com/css?family=Lato:300,300i,700" rel="stylesheet")
       link(rel="stylesheet" href="/css/style.css")
   
-  body 
+  body(data-alert-message=`${alert ? alert.message : ""}` data-alert-type=`${alert ? alert.type : ""}`)
     // header
     include _header
 

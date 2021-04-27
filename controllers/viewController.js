@@ -1,7 +1,6 @@
 const Tour = require("./../models/tourModel");
 const User = require("./../models/userModel");
 const Booking = require("../models/bookingModel");
-// const Review = require("./../models/reviewModel");
 
 const catchAsync = require("./../utils/catchAsync");
 const ApiError = require("./../utils/apiError");
@@ -78,3 +77,19 @@ exports.getMyTours = catchAsync(async (req, res, next) => {
     tours,
   });
 });
+
+exports.getAlerts = (req, res, next) => {
+  if (req.query.alert === "booking-success")
+    res.locals.alert = {
+      message: `Booking was successful. If it doesn't show up in my tours, please check again after sometime!`,
+      type: "success",
+    };
+
+  if (req.query.alert === "booking-failure")
+    res.locals.alert = {
+      message: `Booking was failure. Try again after sometime!`,
+      type: "error",
+    };
+
+  next();
+};

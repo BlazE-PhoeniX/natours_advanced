@@ -7,6 +7,8 @@ const authController = require(`${__dirname}/../controllers/authController`);
 
 const router = express.Router();
 
+router.use(viewController.getAlerts);
+
 router.route("/me").get(authController.verifyUser, viewController.getProfile);
 
 router
@@ -24,9 +26,7 @@ router
 
 router.use(authController.isLoggedIn);
 
-router
-  .route("/")
-  .get(bookingController.createBookingCheckout, viewController.getOverview);
+router.route("/").get(viewController.getOverview);
 
 router.route("/overview").get(viewController.getOverview);
 

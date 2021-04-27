@@ -5,14 +5,11 @@ const tourSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, "A tour must have a name"], //second one is a error string
+      required: [true, "A tour must have a name"],
       unique: true,
       trim: true,
       minlength: [10, "Name must be greater than 10 characters"],
       maxlength: [40, "Name must be less than 40 characters"],
-
-      // validation with 3rd party library
-      // validate: [validator.isAlpha, "Name must only contain letters"],
     },
 
     slug: String,
@@ -88,7 +85,7 @@ const tourSchema = new mongoose.Schema(
     createdAt: {
       type: Date,
       default: Date.now(),
-      select: false, // hides this field from the user
+      select: false,
     },
 
     startDates: [Date],
@@ -125,9 +122,6 @@ const tourSchema = new mongoose.Schema(
         day: Number,
       },
     ],
-
-    // embedding
-    // guides: Array,
 
     // child referencing
     guides: [
@@ -167,17 +161,8 @@ tourSchema.virtual("reviews", {
 tourSchema.pre("save", async function (next) {
   this.slug = slugify(this.name, { lower: true });
 
-  // specifying only the user id manually, automatically fetch the user doc and embed it in tour
-  // const guidePromises = this.guides.map(async id => await User.findById(id));
-  // this.guides = await Promise.all(guidePromises);
-
   next();
 });
-
-// post saving => first parameter points to inserted doc
-// tourSchema.post("save", function (doc, next) {
-//   console.log(doc);
-// });
 
 // Query middlewares
 // pre finding => this points to the query to execute
@@ -192,27 +177,6 @@ tourSchema.pre(/^find/, function (next) {
       "-__v -password -lastPasswordChange -passwordResetToken -passwordResetTokenExpiresIn -_id",
   });
 
-  this.start = Date.now();
-  next();
-});
-
-// post s => first parameter points to fetched docs
-tourSchema.post(/^find/, function (doc, next) {
-  console.log(`Query took ${Date.now() - this.start} ms`);
-  next();
-});
-
-// Aggregate middlewares
-// pre aggregating => this points to the aggregate object, this.pipeline points to the array which we specified
-// tourSchema.pre("aggregate", function (next) {
-//   this.pipeline().unshift({
-//     $match: { secret: { $ne: true } },
-//   });
-//   next();
-// });
-
-tourSchema.post("aggregate", function (doc, next) {
-  // console.log(doc);
   next();
 });
 

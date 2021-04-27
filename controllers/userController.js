@@ -4,16 +4,7 @@ const User = require(`${__dirname}/../models/userModel`);
 const catchAsync = require(`${__dirname}/../utils/catchAsync`);
 const ApiError = require(`${__dirname}/../utils/apiError`);
 const factory = require(`${__dirname}/../utils/handlerFactory`);
-
-// const multerStorage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, "public/img/users");
-//   },
-//   filename: (req, file, cb) => {
-//     const ext = file.mimetype.split("/")[1];
-//     cb(null, `user-${req.user.id}-${Date.now()}.${ext}`);
-//   },
-// });
+const { uploadFile } = require(`${__dirname}/../utils/s3`);
 const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req, file, cb) => {
@@ -38,10 +29,6 @@ const filterObj = (obj, ...allowedFields) =>
 exports.getUsers = factory.getAll(User, "User");
 
 exports.getOneUser = factory.getOne(User, "User");
-// exports.getOneUser = factory.getOne(User, "User", {
-//   path: "bookings",
-//   select: "user",
-// });
 
 exports.changeUser = factory.updateOne(User, "User");
 
@@ -58,12 +45,15 @@ exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
   if (!req.file) return next();
 
   req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
+  req.file.path = `public/img/users/${req.file.filename}`;
 
   await sharp(req.file.buffer)
     .resize(500, 500)
     .toFormat("jpeg")
     .jpeg({ quality: 90 })
-    .toFile(`public/img/users/${req.file.filename}`);
+    .toFile(req.file.path);
+
+  await uploadFile(req.file);
 
   next();
 });

@@ -1,12 +1,12 @@
 const express = require("express");
 const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
-// const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const hpp = require("hpp");
 const cookieParser = require("cookie-parser");
 const compression = require("compression");
+const cors = require("cors");
 
 const ApiError = require(`${__dirname}/utils/apiError`);
 const globalErrorController = require(`${__dirname}/controllers/errorController`);
@@ -17,19 +17,33 @@ const bookingRouter = require(`${__dirname}/routes/bookingRoutes`);
 const reviewRouter = require(`${__dirname}/routes/reviewRoutes`);
 const viewRouter = require(`${__dirname}/routes/viewRoutes`);
 
+const bookingController = require(`${__dirname}/controllers/bookingController`);
+
+const { getFileStream } = require(`${__dirname}/utils/s3`);
+
 const app = express();
+app.enable("trust proxy");
 
 // to initialise pug templates
 app.set("view engine", "pug");
 app.set("views", `${__dirname}/views`);
 
-// adds security headers
-// app.use(helmet());
+app.post(
+  "/webhook-checkout",
+  express.raw({ type: "application/json" }),
+  bookingController.getWebhookCheckout
+);
 
 // parses body and limits size
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+// to allow cross origin requests
+app.use(cors());
+
+// to allow complex requests from cross origin (origin is simply the host url)
+app.options("*", cors());
 
 // protects against no sql attacks
 app.use(mongoSanitize());
@@ -74,20 +88,16 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get(`/images/:folder/:file`, (req, res) => {
+  const filekey = `${req.params.folder}/${req.params.file}`;
+  getFileStream(filekey).pipe(res);
+});
+
 app.use("/", viewRouter);
 app.use("/bookings", bookingRouter);
 app.use("/api/v1/tours", tourRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/reviews", reviewRouter);
-
-// to handle all routes that are not specified (all type of requests)
-// app.all("*", (req, res) => {
-//   res.status(404).json({
-//     status: "fail",
-//     message: `Cant find ${req.originalUrl} on this server`,
-//     data: null,
-//   });
-// });
 
 app.all("*", (req, res, next) => {
   next(
